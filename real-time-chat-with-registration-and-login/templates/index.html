@@ -56,7 +56,7 @@
             var messageInput = document.querySelector('#messageInput');
             var message = messageInput.value;
             if (message !== '') {
-            socket.emit('message', { message: message });
+            socket.emit('message',message);
             messageInput.value = '';
         }
         }
