@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>چت ریل تایم</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        #messages {
+            height: 100px;
+            width: 80%;
+            max-height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+            direction: rtl;
+        }
+        #messageInput {
+            width: 80%;
+            padding: 10px;
+            margin-right: 10px;
+            direction: rtl;
+        }
+        #sendButton {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        #sendButton:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('message', function (data) {
+            var p = document.createElement('p');
+            p.classList.add('message');
+            p.innerHTML = '<strong>' + data.username + ':</strong> ' + data.message;
+            document.querySelector('#messages').appendChild(p);
+        });
+        function sendMessage() {
+            var messageInput = document.querySelector('#messageInput');
+            var message = messageInput.value;
+            if (message !== '') {
+            socket.emit('message', { message: message });
+            messageInput.value = '';
+        }
+        }
+    </script>
+</head>
+<body>
+    <h1>Real-time Chat</h1>
+    <div id="messages"></div>
+    <div>
+        <input type="text" id="messageInput" placeholder="Type your message..." />
+        <button id="sendButton" onclick="sendMessage()">Send</button>
+    </div>
+</body>
+</html>
